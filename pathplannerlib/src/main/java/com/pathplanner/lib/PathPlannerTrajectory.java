@@ -12,6 +12,8 @@ import java.util.List;
 
 public class PathPlannerTrajectory extends Trajectory {
   private static final double FIELD_WIDTH_METERS = 8.02;
+  //FIXME: add the correct number 
+  private static final double FIELD_LENGTH_METERS = 16.02;
 
   private final List<EventMarker> markers;
   private final StopEvent startStopEvent;
@@ -121,9 +123,9 @@ public class PathPlannerTrajectory extends Trajectory {
       PathPlannerState transformedState = new PathPlannerState();
 
       Translation2d transformedTranslation =
-          new Translation2d(state.poseMeters.getX(), FIELD_WIDTH_METERS - state.poseMeters.getY());
+          new Translation2d(FIELD_LENGTH_METERS - state.poseMeters.getX(), state.poseMeters.getY());
       Rotation2d transformedHeading = state.poseMeters.getRotation().times(-1);
-      Rotation2d transformedHolonomicRotation = state.holonomicRotation.times(-1);
+      Rotation2d transformedHolonomicRotation = state.holonomicRotation.rotateBy(Rotation2d.fromDegrees(180));
 
       transformedState.timeSeconds = state.timeSeconds;
       transformedState.velocityMetersPerSecond = state.velocityMetersPerSecond;
